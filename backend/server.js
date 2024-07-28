@@ -22,12 +22,19 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-// Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+// Add debug logs to print resolved paths
+const distPath = path.join(__dirname, '..', 'frontend', 'dist');
+const indexPath = path.join(__dirname, '..', 'frontend', 'dist', 'index.html');
 
-// Catch-all handler to serve index.html for any request not matching an API routes
+console.log('Serving static files from:', distPath);
+console.log('Index file path:', indexPath);
+
+// Serve static files from the React frontend app
+app.use(express.static(distPath));
+
+// Catch-all handler to serve index.html for any request not matching an API route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+  res.sendFile(indexPath);
 });
 
 server.listen(PORT, () => {
