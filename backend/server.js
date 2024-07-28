@@ -31,10 +31,11 @@ app.use("/api/users", userRoutes);
 // });
 
 
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
 
+// Catch-all handler to serve index.html for any request not matching an API route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
 });
 
 
