@@ -25,7 +25,7 @@ app.use("/api/users", userRoutes);
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
 
-// Catch-all handler to serve index.html for any request not matching an API route
+// Catch-all handler to serve index.html for any request not matching an API routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
 });
