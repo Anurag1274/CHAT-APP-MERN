@@ -7,12 +7,13 @@ import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import userRoutes from "./routes/user.routes.js";
 
-import connectToMongoDB from "./db/connectMongoose.js";
+import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
 
 dotenv.config();
 
 const __dirname = path.resolve();
+// PORT should be assigned after calling dotenv.config() because we need to access the env variables. Didn't realize while recording the video. Sorry for the confusion.
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json()); // to parse the incoming requests with JSON payloads (from req.body)
@@ -22,22 +23,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-// Define the path to the built frontend files
-const distPath = path.join(__dirname, '..', 'frontend', 'dist');
-const indexPath = path.join(__dirname, '..', 'frontend', 'dist', 'index.html');
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-console.log('Serving static files from:', distPath);
-console.log('Index file path:', indexPath);
-
-// Serve static files from the React frontend app
-app.use(express.static(distPath));
-
-// Catch-all handler to serve index.html for any request not matching an API route
-app.get('*', (req, res) => {
-  res.sendFile(indexPath);
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "/frontend/dist/index.html"));
 });
 
 server.listen(PORT, () => {
-  connectToMongoDB();
-  console.log(`Server Running on port ${PORT}`);
+	connectToMongoDB();
+	console.log(`Server Running on port ${PORT}`);
 });
